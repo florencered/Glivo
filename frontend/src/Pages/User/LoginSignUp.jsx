@@ -5,16 +5,20 @@ import Loader from "../../Components/Layout/Loader/Loader";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import FaceIcon from "@mui/icons-material/Face";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useSelector, useDispatch } from "react-redux";
+// import Cookies from "universal-cookie";
 import { login, clearError, register } from "../../actions/userAction";
 import { useAlert } from "react-alert";
+import locationData from "../../locationData.json";
 
 const LoginSignUp = ({ history, location }) => {
   const dispatch = useDispatch();
   const alert = useAlert();
   const navigate = useNavigate();
+  // const cookies = new Cookies();
 
-  const { error, loading, isAuthenticated } = useSelector(
+  const { error, loading, isAuthenticated, user } = useSelector(
     (state) => state.user
   );
 
@@ -25,13 +29,33 @@ const LoginSignUp = ({ history, location }) => {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
-  const [user, setUser] = useState({
+  const [loacalUser, setLocalUser] = useState({
     name: "",
     email: "",
     password: "",
   });
 
-  const { name, email, password } = user;
+  const [countryName, setCountryName] = useState("");
+  const [state, setState] = useState([]);
+  const [stateName, setStateName] = useState("");
+
+  const handlecounty = (e) => {
+    const getcountryName = e.target.value;
+    const getStatedata = locationData.find(
+      (country) => country.country_name === getcountryName
+    ).states;
+    setState(getStatedata);
+    setCountryName(getcountryName);
+    console.log(getcountryName);
+  };
+
+  const handlestate = (e) => {
+    const statename = e.target.value;
+    console.log(statename);
+    setStateName(statename);
+  };
+
+  const { name, email, password } = loacalUser;
 
   const [avatar, setAvatar] = useState("/Profile.png");
   const [avatarPreview, setAvatarPreview] = useState("/Profile.png");
@@ -39,16 +63,19 @@ const LoginSignUp = ({ history, location }) => {
   const loginSubmit = (e) => {
     e.preventDefault();
     dispatch(login(loginEmail, loginPassword));
-    console.log("Form Submitted...");
   };
   const registerSubmit = (e) => {
     e.preventDefault();
+
+    console.log(countryName, stateName);
 
     const myForm = new FormData();
 
     myForm.set("name", name);
     myForm.set("email", email);
     myForm.set("password", password);
+    myForm.set("country", countryName);
+    myForm.set("state", stateName);
     myForm.set("avatar", avatar);
 
     dispatch(register(myForm));
@@ -66,15 +93,26 @@ const LoginSignUp = ({ history, location }) => {
       };
 
       reader.readAsDataURL(e.target.files[0]);
+    } else if (e.target.name === "country") {
+      const getcountryName = e.target.value;
+      const getStatedata = locationData.find(
+        (country) => country.country_name === getcountryName
+      ).states;
+      setState(getStatedata);
+      setCountryName(getcountryName);
+    } else if (e.target.name === "state") {
+      const statename = e.target.value;
+      console.log(statename);
+      setStateName(statename);
     } else {
-      setUser({ ...user, [e.target.name]: e.target.value });
+      setLocalUser({ ...loacalUser, [e.target.name]: e.target.value });
     }
   };
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
       dispatch(clearError());
+      // alert.info(error);
     }
 
     if (isAuthenticated) {
@@ -179,6 +217,36 @@ const LoginSignUp = ({ history, location }) => {
                   value={password}
                   onChange={registerDataChange}
                 />
+              </div>
+              <div className="country">
+                <LocationOnIcon />
+                <select
+                  name="country"
+                  className="form-control"
+                  onChange={registerDataChange}
+                >
+                  <option value="">Select Country</option>
+                  {locationData.map((getcountry, index) => (
+                    <option value={getcountry.country_name} key={index}>
+                      {getcountry.country_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="state">
+                <LocationOnIcon />
+                <select
+                  name="state"
+                  className="form-control"
+                  onChange={registerDataChange}
+                >
+                  <option value="">Select State</option>
+                  {state.map((getstate, index) => (
+                    <option value={getstate.state_name} key={index}>
+                      {getstate.state_name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div id="registerImage">

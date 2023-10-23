@@ -5,8 +5,6 @@ const {
   updateLawyer,
   deleteLawyer,
   getLawyerDetails,
-  loginLawyer,
-  logoutLawyer,
   rateReviewLawyer,
   getAllReview,
 } = require("../controllers/lawyerController");
@@ -16,10 +14,6 @@ const { isAuthenticatedUser, authorizeRoles } = require("../Middleware/auth");
 const router = express.Router();
 
 router.route("/lawyer").get(getAllLawyers);
-
-router.route("/lawyer/login").post(loginLawyer);
-
-router.route("/lawyer/logout").get(logoutLawyer);
 
 router
   .route("/lawyer/feedback/:id")

@@ -8,9 +8,9 @@
   justify-content: center;
   align-items: center;
   background-color: rgb(231, 231, 231);
-  position: fixed;
-  top: 0%;
-  left: 0;
+  /* position: fixed; */
+  /* top: 0%; */
+  /* left: 0; */
 }
 
 .LoginSignUpBox {
@@ -55,7 +55,7 @@
   margin: auto;
   padding: 2vmax;
   justify-content: space-evenly;
-  height: 70%;
+  height: 75%;
   transition: all 0.5s;
 }
 
@@ -68,16 +68,18 @@
   display: flex;
   width: 100%;
   align-items: center;
+  margin-bottom: 6px;
 }
 .loginForm > div > input,
-.signUpForm > div > input {
+.signUpForm > div > input,
+.signUpForm > div > select {
   padding: 1vmax 4vmax;
   padding-right: 1vmax;
   width: 100%;
   box-sizing: border-box;
   border: 1px solid rgba(0, 0, 0, 0.267);
   border-radius: 4px;
-  font: 300 0.9vmax cursive;
+  font: 300 0.9vmax;
   outline: none;
 }
 
@@ -89,7 +91,7 @@
   color: rgba(0, 0, 0, 0.623);
 }
 
-.loginForm > a {
+.loginForm > a{
   color: rgba(0, 0, 0, 0.651);
   text-decoration: none;
   align-self: flex-end;
@@ -118,10 +120,11 @@
   height: 5vh;
   border: none;
   margin: 0%;
-  font: 400 0.8vmax cursive;
+  font: 400 0.8vmax;
   transition: all 0.5s;
   padding: 0 1vmax;
   color: rgba(0, 0, 0, 0.623);
+  /* display: none; */
   background-color: rgb(255, 255, 255);
 }
 

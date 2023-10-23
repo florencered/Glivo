@@ -1,4 +1,4 @@
-  import axios from "axios";
+import axios from "axios";
 import {
   ALL_PRODUCT_REQUEST,
   ALL_PRODUCT_SUCCESS,
@@ -31,7 +31,9 @@ export const getProductDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAILS_REQUEST });
 
-    const { data } = await axios.get(`http://localhost:4000/api/v1/lawyer/${id}`);
+    const { data } = await axios.get(
+      `http://localhost:4000/api/v1/lawyer/${id}`
+    );
 
     dispatch({
       type: PRODUCT_DETAILS_SUCCESS,

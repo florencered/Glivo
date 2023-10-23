@@ -14,9 +14,15 @@ exports.createLawyer = CatchAsyncErrors(async (req, res, next) => {
 
   const user = await User.findById(req.user.id);
 
-  const { name, email, password, description, price, category } = req.body;
+  const { name, description, price, category } = req.body;
 
-  const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+  const myCloud = await cloudinary.v2.uploader.upload(req.body.images, {
+    folder: "productavatar",
+    width: 150,
+    crop: "scale",
+  });
+
+  const myCloud2 = await cloudinary.v2.uploader.upload(req.body.bgImage, {
     folder: "productavatar",
     width: 150,
     crop: "scale",
@@ -24,14 +30,16 @@ exports.createLawyer = CatchAsyncErrors(async (req, res, next) => {
 
   const lawyer = await Lawyer.create({
     name,
-    email,
-    password,
     description,
     price,
     category,
     images: {
       public_id: myCloud.public_id,
       url: myCloud.secure_url,
+    },
+    bgImage: {
+      public_id: myCloud2.public_id,
+      url: myCloud2.secure_url,
     },
     user,
   });
@@ -102,47 +110,10 @@ exports.getAllReview = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// Login Lawyer
-
-exports.loginLawyer = CatchAsyncErrors(async (req, res, next) => {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    return next(new ErrorHandler("Please enter Email and Password", 400));
-  }
-
-  const lawyer = await Lawyer.findOne({ email }).select("+password");
-
-  if (!lawyer) {
-    return next(new ErrorHandler("Invalid Email and Password", 401));
-  }
-
-  const isPassword = lawyer.comparePassword(password);
-
-  if (!isPassword) {
-    return next(new ErrorHandler("Invalid Email and Password", 401));
-  }
-
-  sendToken(lawyer, 200, res);
-});
-
-// Logout Lawyer
-
-exports.logoutLawyer = CatchAsyncErrors(async (req, res, next) => {
-  res.cookie("token", null, {
-    expires: new Date(Date.now()),
-  });
-
-  res.status(200).json({
-    success: true,
-    message: "Logged Out Successfully!!",
-  });
-});
-
 // Get All Lawyer
 
 exports.getAllLawyers = CatchAsyncErrors(async (req, res) => {
-  let resultPerPage = 8;
+  let resultPerPage = 10;
   const lawyerCount = await Lawyer.countDocuments();
 
   const apiFeature = new ApiFeatures(Lawyer.find(), req.query)

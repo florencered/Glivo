@@ -10,8 +10,9 @@ const catchAsyncErrors = require("../Middleware/catchAsyncErrors");
 
 // Register a user
 exports.registerUser = CatchAsyncErrors(async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, country, state } = req.body;
 
+  
   const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
     folder: "avatar",
     width: 150,
@@ -22,6 +23,8 @@ exports.registerUser = CatchAsyncErrors(async (req, res, next) => {
     name,
     email,
     password,
+    country,
+    state,
     avatar: {
       public_id: myCloud.public_id,
       url: myCloud.secure_url,

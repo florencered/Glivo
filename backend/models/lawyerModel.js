@@ -10,18 +10,6 @@ const lawyerSchema = new mongoose.Schema({
     required: [true, "Please Enter Lawyer Name"],
     trim: true,
   },
-  email: {
-    type: String,
-    required: [true, "Please Enter Your Email"],
-    unique: true,
-    validate: [validator.isEmail, "Please Enter a valid Email"],
-  },
-  password: {
-    type: String,
-    required: [true, "Please Enter Your Password"],
-    minLength: [8, "Password should be greater than 8 characters"],
-    select: false,
-  },
   description: {
     type: String,
     required: [true, "Please Enter product Description"],
@@ -35,18 +23,28 @@ const lawyerSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  images: [
-    {
-      public_id: {
-        type: String,
-        required: true,
-      },
-      url: {
-        type: String,
-        required: true,
-      },
+  images: {
+    public_id: {
+      type: String,
+      required: true,
     },
-  ],
+    url: {
+      type: String,
+      required: true,
+    },
+  },
+
+  bgImage: {
+    public_id: {
+      type: String,
+      required: true,
+    },
+    url: {
+      type: String,
+      required: true,
+    },
+  },
+
   category: {
     type: String,
     required: [true, "Please Enter Lawyer Category"],
